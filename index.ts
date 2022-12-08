@@ -316,7 +316,14 @@ export default function sveltePlugin(options?: esbuildSvelteOptions): Plugin {
                     return result;
                 } catch (e: any) {
                     return {
-                        errors: [await convertMessage(e, args.path, originalSource, compilerOptions.sourcemap)],
+                        errors: [
+                            await convertMessage(
+                                e,
+                                args.path,
+                                originalSource,
+                                compilerOptions.sourcemap
+                            ),
+                        ],
                         watchFiles: previousWatchFiles,
                     };
                 }
