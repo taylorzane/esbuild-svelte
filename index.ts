@@ -27,7 +27,7 @@ interface esbuildSvelteOptions {
      */
     cache?: boolean | "overzealous";
 
-    hmr?: boolean | HMROptions;
+    hmr?: boolean | MakeHMROptions;
 
     /**
      * Should esbuild-svelte create a binding to an html element for components given in the entryPoints list
@@ -46,6 +46,18 @@ interface esbuildSvelteOptions {
      * Defaults to a constant function that returns `true`
      */
     filterWarnings?: (warning: Warning) => boolean;
+}
+
+interface MakeHMROptions {
+    walk?: function;
+    meta?: string;
+
+    hotApi?: string;
+    adapter?: string;
+    absoluteImports?: boolean;
+    versionNonAbsoluteImports?: boolean;
+
+    hotOptions?: HMROptions;
 }
 
 interface HMROptions {
@@ -106,6 +118,7 @@ export default function sveltePlugin(options?: esbuildSvelteOptions): Plugin {
             walk,
             hotApi: join(svelteHmrHotPath, 'hot-api-esm.js'),
             adapter: join(svelteHmrHotPath, 'proxy-adapter-dom.js'),
+            ...(options?.hmr)
         });
         console.log("svelte-hmr loaded");
     } catch {} // don't do anything if it fails
@@ -310,9 +323,9 @@ export default function sveltePlugin(options?: esbuildSvelteOptions): Plugin {
                     }
 
                     //TODO may not need to check for incremental build?
-                    console.log(options?.hmr == true, makeHot != null)
+                    // console.log(options?.hmr == true, makeHot != null)
                     if(options?.hmr == true && makeHot != null) {
-                        console.log("HMR enabled")
+                        // console.log("HMR enabled")
                         //options.hmr instanceof Object ? options.hmr : {}
                         result.contents = makeHot(filename, result.contents, {}, compiled, source, true);
                         //result.warnings = result?.warnings?.concat([{text:"HMR enabled", location: {file: filename, line: 1, column: 1}}]);
