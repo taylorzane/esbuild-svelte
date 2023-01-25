@@ -324,7 +324,7 @@ export default function sveltePlugin(options?: esbuildSvelteOptions): Plugin {
 
                     //TODO may not need to check for incremental build?
                     // console.log(options?.hmr == true, makeHot != null)
-                    if(options?.hmr == true && makeHot != null) {
+                    if('hmr' in options && options.hmr !== false && makeHot != null) {
                         // console.log("HMR enabled")
                         //options.hmr instanceof Object ? options.hmr : {}
                         result.contents = makeHot(filename, result.contents, {}, compiled, source, true);
