@@ -49,7 +49,7 @@ interface esbuildSvelteOptions {
 }
 
 interface MakeHMROptions {
-    walk?: function;
+    walk?: any;
     meta?: string;
 
     hotApi?: string;
